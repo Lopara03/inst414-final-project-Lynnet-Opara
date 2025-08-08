@@ -9,11 +9,10 @@ File used: HMS_2022-2023_PUBLIC_instchars.csv
 Youth Risk Behavior Surveillance System (YRBSS) – a CDC dataset that captures mental health indicators among youth.
 File used: Youth_Risk_Behavioral_Surveillance_System__YRBSS__-_Mental_Health_Indicators_20250801.csv
 
-Goal:
+# Goal:
 To clean, analyze, and visualize mental health trends in these populations, and use predictive modeling to identify key risk factors.
 
-Setup Instructions
-To get started:
+# Setup Instructions To get started:
 
 Clone this repository
 
