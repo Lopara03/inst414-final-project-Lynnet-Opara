@@ -7,11 +7,13 @@ This project looks at the mental health trends in college-aged individuals by an
 - **Healthy Minds Study (HMS)** – a national survey focused on mental health, service utilization, and related issues among undergraduate and graduate students.  
 
 File used: `HMS_2022-2023_PUBLIC_instchars2.csv`
+
 Description: Contains athe first 1,000 records with self-reported mental health metrics, demographics, and usage of mental health services.
 
 - **Youth Risk Behavior Surveillance System (YRBSS)** – a CDC dataset that captures mental health indicators among youth.  
 
 File used: `Youth_Risk_Behavioral_Surveillance_System__YRBSS__-_Mental_Health_Indicators_20250801.csv`
+
 Description: Contains 5,000+ records tracking youth mental health behaviors and related risk factors.
 
 **Goal:**  
