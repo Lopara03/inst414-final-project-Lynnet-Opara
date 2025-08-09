@@ -1,4 +1,0 @@
-attribute_name,description,data_type,example_value,unit
-responseid,Unique ID for each respondent,string,9cbf3e4a,N/A
-age,Age of the respondent,integer,21,years
-sex_birth,Biological sex assigned at birth,string,Female,N/A
