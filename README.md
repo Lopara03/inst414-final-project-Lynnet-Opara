@@ -56,7 +56,7 @@ Copy
 Edit
 inst414-final-project-Lynnet-Opara/
 
-
+```
 │
 ├── data/                     # Data files
 │   ├── extracted/            # Raw data files
@@ -79,7 +79,7 @@ inst414-final-project-Lynnet-Opara/
 ├── main.py                   # Entry point to run full pipeline
 ├── README.md                 # Project overview and instructions
 ├── requirements.txt          # Python dependencies
-
+```
 # Add Collaborators
 mali24@umd.edu
 gillikin@umd.edu
