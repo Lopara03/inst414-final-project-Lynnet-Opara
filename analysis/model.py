@@ -5,7 +5,6 @@ this module trains a classification model (e.g., logistic regression)
 import logging
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
-from .evaluate import evaluate_model
 
 def run_model(df, features, target):
     """
