@@ -1,24 +1,17 @@
 """
 main script to run the ETL, analysis, and visualization pipeline 
-for mental health trends in undergraduate students.
+for adult and student mental health datasets.
 """
 
 import logging
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
-
-from etl.extract import extract_hms, extract_yrbss
-from etl.transform import clean_data
-from etl.load import save_data  
-from analysis.model import run_model
-from analysis.evaluate import evaluate_model
-from vis import visualizations as visualize  
+import seaborn as sns
 
 
 def setup_logger():
-    """set up a logger to capture info and errors."""
+    """Set up a logger to capture info and errors."""
     logger = logging.getLogger("pipeline_logger")
     logger.setLevel(logging.INFO)
 
@@ -35,7 +28,6 @@ def setup_logger():
     fh.setFormatter(formatter)
     ch.setFormatter(formatter)
 
-    # add handlers
     if not logger.hasHandlers():
         logger.addHandler(fh)
         logger.addHandler(ch)
@@ -44,100 +36,107 @@ def setup_logger():
 
 
 def main():
-    """entry point to run the full project pipeline."""
     logger = setup_logger()
     logger.info("Pipeline started")
 
+    # -------------------------
     # 1. extract data
+    # -------------------------
     try:
-        logger.info("Extracting HMS data...")
-        hms_df = extract_hms("/Users/lynnetopara/Desktop/INST414/inst414-final-project-Lynnet-Opara/data/extracted/HMS_2022-2023_PUBLIC_instchars2.csv")
-        logger.info(f"HMS data loaded, shape: {hms_df.shape}")
+        adult_file = "/Users/lynnetopara/Desktop/INST414/inst414-final-project-Lynnet-Opara/data/extracted/adult-depression-lghc-indicator-24.csv"
+        students_file = "/Users/lynnetopara/Desktop/INST414/inst414-final-project-Lynnet-Opara/data/extracted/students_mental_health_survey.csv"
 
-        logger.info("Extracting YRBSS data...")
-        yrbss_df = extract_yrbss("/Users/lynnetopara/Desktop/INST414/inst414-final-project-Lynnet-Opara/data/extracted/Youth_Risk_Behavioral_Surveillance_System__YRBSS__-_Mental_Health_Indicators_20250801.csv")
-        logger.info(f"YRBSS data loaded, shape: {yrbss_df.shape}")
+
+        adult_df = pd.read_csv(adult_file)
+        students_df = pd.read_csv(students_file)
+
+        logger.info(f"Adult dataset loaded, shape: {adult_df.shape}")
+        logger.info(f"Students dataset loaded, shape: {students_df.shape}")
 
     except Exception as e:
-        logger.error(f"Error during data extraction: {e}")
+        logger.error(f"Error loading datasets: {e}")
         return
 
-    # 2. transform data
+    # -------------------------
+    # 2. transform / clean data
+    # -------------------------
     try:
-        logger.info("Cleaning HMS data...")
-        hms_clean = clean_data(hms_df)
-        logger.info(f"HMS data cleaned, shape: {hms_clean.shape}")
+        # adult dataset
+        adult_df = adult_df.dropna(subset=["Percent"])
+        adult_df["Year"] = adult_df["Year"].astype(int)
 
-        logger.info("Cleaning YRBSS data...")
-        yrbss_clean = clean_data(yrbss_df)
-        logger.info(f"YRBSS data cleaned, shape: {yrbss_clean.shape}")
+        # Students dataset
+        students_df = students_df.dropna(subset=["Depression_Score"])
+        students_df["Age"] = students_df["Age"].astype(int)
+        students_df["CGPA"] = students_df["CGPA"].astype(float)
+        students_df["Stress_Level"] = students_df["Stress_Level"].astype(int)
+        students_df["Depression_Score"] = students_df["Depression_Score"].astype(int)
+        students_df["Anxiety_Score"] = students_df["Anxiety_Score"].astype(int)
+
+        logger.info("Both datasets cleaned successfully")
 
     except Exception as e:
-        logger.error(f"Error during data cleaning: {e}")
+        logger.error(f"Error cleaning datasets: {e}")
         return
 
-    # 3. load / merge data
+    # -------------------------
+    # 3. save cleaned datasets
+    # -------------------------
     try:
-        logger.info("Merging datasets...")
-        # If save_data just writes a file, you need a merge function; otherwise, just merge here
-        full_data = pd.concat([hms_clean, yrbss_clean], ignore_index=True)
-        save_data(full_data, "data/processed/full_data.csv")
-        logger.info(f"Data merged and saved, shape: {full_data.shape}")
-
+        os.makedirs("data/processed", exist_ok=True)
+        adult_df.to_csv("data/processed/cleaned_adult_depression.csv", index=False)
+        students_df.to_csv("data/processed/cleaned_students_mental_health.csv", index=False)
+        logger.info("Both datasets saved successfully")
     except Exception as e:
-        logger.error(f"Error during data merging/loading: {e}")
-        return
+        logger.error(f"Error saving cleaned datasets: {e}")
 
-    # 4. modeling / evaluation
-    hms = pd.read_csv("HMS_2022-2023_PUBLIC_instchars2csv")
+    # -------------------------
+    # 4. visualizations
+    # -------------------------
     try:
-        logger.info("Running predictive model and evaluating...")
-
-        # example: defining my target column and feature columns
-        hms['mental_health_risk'] = hms['dep_any'] | hms['anx_any'] | hms['anymhprob']
-        # replace with my actual target column
-        feature_cols = [c for c in full_data.columns if c != target_col]
-
-        X = full_data[feature_cols]
-        y = full_data[target_col]
-
-        X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=0.2, random_state=42
-        )
-
-        # train model
-        model = run_model(X_train, y_train)  # returns trained model
-
-        # evaluate
-        evaluation_metrics = evaluate_model(model, X_test, y_test)
-        logger.info(f"Evaluation Metrics: {evaluation_metrics}")
-
-        #  metrics CSV
-        os.makedirs("data/model-eval", exist_ok=True)
-        metrics_df = pd.DataFrame([evaluation_metrics])
-        metrics_df.to_csv("data/model-eval/metrics_table.csv", index=False)
-        logger.info("Evaluation metrics saved to data/model-eval/metrics_table.csv")
-
-        #  bar chart
         os.makedirs("data/visualizations", exist_ok=True)
-        plt.figure(figsize=(6,4))
-        plt.bar(evaluation_metrics.keys(), evaluation_metrics.values(), color='skyblue')
-        plt.title("Model Evaluation Metrics")
-        plt.ylabel("Score")
-        plt.ylim(0,1)
-        plt.savefig("data/visualizations/metrics_barplot.png")
+
+        # --- adult dataset visualizations ---
+        adult_total = adult_df[adult_df["Strata"] == "Total"]
+        plt.figure(figsize=(8,5))
+        plt.plot(adult_total["Year"], adult_total["Percent"], marker="o", color="navy")
+        plt.title("Adult Depression Rates Over Time")
+        plt.xlabel("Year")
+        plt.ylabel("Percent")
+        plt.grid(True)
+        plt.savefig("data/visualizations/depression_trend_adult.png")
         plt.close()
-        logger.info("Evaluation metrics bar chart saved to data/visualizations/metrics_barplot.png")
 
-    except Exception as e:
-        logger.error(f"Error during modeling/evaluation: {e}")
-        return
+        latest_year = adult_df["Year"].max()
+        adult_latest = adult_df[adult_df["Year"] == latest_year]
+        plt.figure(figsize=(10,6))
+        sns.barplot(data=adult_latest, x="Strata Name", y="Percent", hue="Strata", dodge=False)
+        plt.title(f"Adult Depression Rates by Group ({latest_year})")
+        plt.xticks(rotation=45, ha="right")
+        plt.ylabel("Percent")
+        plt.tight_layout()
+        plt.savefig("data/visualizations/depression_by_group_adult.png")
+        plt.close()
 
-    # 5. visualizations
-    try:
-        logger.info("Generating additional visualizations...")
-        visualize(full_data)  # adapt based on my visualizations module
-        logger.info("Visualizations complete")
+        # --- students dataset visualizations ---
+        plt.figure(figsize=(8,5))
+        sns.histplot(students_df["Depression_Score"], bins=10, kde=True, color="green")
+        plt.title("Distribution of Student Depression Scores")
+        plt.xlabel("Depression Score")
+        plt.ylabel("Count")
+        plt.savefig("data/visualizations/depression_score_students.png")
+        plt.close()
+
+        plt.figure(figsize=(8,5))
+        sns.countplot(x="Gender", data=students_df, palette="Set2")
+        plt.title("Student Gender Distribution")
+        plt.xlabel("Gender")
+        plt.ylabel("Count")
+        plt.savefig("data/visualizations/student_gender_distribution.png")
+        plt.close()
+
+        logger.info("Visualizations for both datasets saved successfully")
+
     except Exception as e:
         logger.error(f"Error during visualization: {e}")
 
@@ -146,3 +145,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
