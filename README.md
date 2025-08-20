@@ -14,7 +14,7 @@ Description: Contains approximately 160 records with demographic information, se
 
 File used: `students_mental_health_survey.csv`
 
-Description: Contains over 1,500 records tracking youth mental health behaviors and related risk factors.
+Description: Contains over 7,000 records tracking youth mental health behaviors and related risk factors.
 
 **Goal:**  
 To clean, analyze, and visualize mental health trends in these populations, and use predictive modeling to identify key risk factors.
