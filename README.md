@@ -4,17 +4,17 @@
 
 This project looks at the mental health trends in college-aged individuals by analyzing two key datasets:
 
-- **Healthy Minds Study (HMS)** – a national survey focused on mental health, service utilization, and related issues among undergraduate and graduate students.  
+- **Adult Depression Indicators (LGHC)** – sourced from national health data on depression prevalence and related indicators.
 
-File used: `HMS_2022-2023_PUBLIC_instchars2.csv`
+File used: `adult-depression-lghc-indicator-24.csv`
 
-Description: Contains athe first 1,000 records with self-reported mental health metrics, demographics, and usage of mental health services.
+Description: Contains approximately 160 records with demographic information, self-reported depression indicators, and access to care variables.
 
-- **Youth Risk Behavior Surveillance System (YRBSS)** – a CDC dataset that captures mental health indicators among youth.  
+- **Students’ Mental Health Survey** – a dataset formed through survey data that reflects student demographics, lifestyle, and mental health factors.
 
-File used: `Youth_Risk_Behavioral_Surveillance_System__YRBSS__-_Mental_Health_Indicators_20250801.csv`
+File used: `students_mental_health_survey.csv`
 
-Description: Contains 5,000+ records tracking youth mental health behaviors and related risk factors.
+Description: Contains over 1,500 records tracking youth mental health behaviors and related risk factors.
 
 **Goal:**  
 To clean, analyze, and visualize mental health trends in these populations, and use predictive modeling to identify key risk factors.
@@ -29,20 +29,27 @@ To get started:
    git clone [your-repo-link]
    cd inst414-final-project-lynnet-opara
 
-2. Create and activate a virtual environment
+2. Create and activate a virtual environment  
+
+```bash
 python3 -m venv venv
 source venv/bin/activate   # On Mac/Linux
 .\venv\Scripts\activate    # On Windows
-
+```
 3. Install: "pip install -r requirements.txt" into terminal
 pip install -r requirements.txt
 
 # Running the Project
 Run the project pipeline by executing:
 
+
 Copy
+
 Edit
+
 python main.py
+
+
 This will run the full data science pipeline including:
 
 Extracting raw data files
@@ -54,8 +61,11 @@ Running analytical models
 Generating visualizations
 
 # Code Package Structure
+
 Copy
+
 Edit
+
 inst414-final-project-Lynnet-Opara/
 
 ```

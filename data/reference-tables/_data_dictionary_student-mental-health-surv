@@ -1,0 +1,21 @@
+attribute_name,description,data_type,example_value,unit
+Age,Age of the student,Integer,25,years
+Course,Student’s field of study,String,Engineering,N/A
+Gender,Student’s gender,String,Male,N/A
+CGPA,Cumulative Grade Point Average,Float,3.56,GPA scale (0–4)
+Stress_Level,Self-reported stress level,Integer,3,0–5 scale
+Depression_Score,Self-reported depression score,Integer,3,0–5 scale
+Anxiety_Score,Self-reported anxiety score,Integer,2,0–5 scale
+Sleep_Quality,Quality of sleep,String,Good,N/A
+Physical_Activity,Level of physical activity,String,Moderate,N/A
+Diet_Quality,Quality of diet,String,Good,N/A
+Social_Support,Level of social support received,String,Moderate,N/A
+Relationship_Status,Current romantic relationship status,String,Single,N/A
+Substance_Use,Frequency of substance use,String,Never,N/A
+Counseling_Service_Use,Frequency of using counseling services,String,Occasionally,N/A
+Family_History,Family history of mental health issues,String,No,N/A
+Chronic_Illness,Presence of chronic illnesses,String,No,N/A
+Financial_Stress,Self-reported financial stress level,Integer,2,0–5 scale
+Extracurricular_Involvement,Level of participation in extracurricular activities,String,Moderate,N/A
+Semester_Credit_Load,Number of credits taken this semester,Integer,17,credits
+Residence_Type,Type of residence during the semester,String,On-Campus,N/A

@@ -1,57 +1,61 @@
-
-"""
-this module evaluates the performance of the model using various metrics
-"""
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
-def evaluate_model(model, X_test, y_test):
+def evaluate_model(model, X_test, y_test, average='binary'):
     """
-    evaluates the trained model on test data.
-
-    args:
+    Evaluates the trained model on test data.
+    
+    Args:
         model: trained model
         X_test: test features
         y_test: true labels
-
-    returns:
-        dict: evaluation metrics (accuracy, precision, recall, f1)
+        average: 'binary' or 'macro' for multiclass
+        
+    Returns:
+        dict: evaluation metrics
     """
     try:
         preds = model.predict(X_test)
 
         metrics = {
             "accuracy": accuracy_score(y_test, preds),
-            "precision": precision_score(y_test, preds, zero_division=0),
-            "recall": recall_score(y_test, preds, zero_division=0),
-            "f1": f1_score(y_test, preds, zero_division=0)
+            "precision": precision_score(y_test, preds, zero_division=0, average=average),
+            "recall": recall_score(y_test, preds, zero_division=0, average=average),
+            "f1": f1_score(y_test, preds, zero_division=0, average=average)
         }
 
         return metrics
     except Exception as e:
-        # If logging is set up in main.py, this will show errors there
         print(f"Error in evaluate_model(): {e}")
         return None
 
-def save_metrics_and_plots(metrics_dict):
-    # Convert dict to DataFrame
-    metrics_df = pd.DataFrame(metrics_dict)
-    
-    # Save metrics table
-    metrics_df.to_csv('/Users/lynnetopara/Desktop/INST414/inst414-final-project-Lynnet-Opara/data/model-eval/metrics_table.csv', index=False)
-    
-    # Example: save accuracy plot
-    plt.bar(metrics_df['Model'], metrics_df['Accuracy'])
-    plt.ylabel('Accuracy')
-    plt.title('Model Accuracy Comparison')
-    plt.close()  # avoids overlapping plots if you call multiple times
+
+def save_metrics_and_plots(metrics_dict, save_path='/Users/lynnetopara/Desktop/INST414/inst414-final-project-Lynnet-Opara/data/model-eval/'):
+    """
+    Saves metrics dict as CSV and plots bar charts.
+    """
+    import os
+    os.makedirs(save_path, exist_ok=True)
+
+    metrics_df = pd.DataFrame([metrics_dict])
+    metrics_df.to_csv(os.path.join(save_path, 'metrics_table.csv'), index=False)
+
+    # plot each metric
+    plt.figure(figsize=(6,4))
+    plt.bar(metrics_dict.keys(), metrics_dict.values(), color='skyblue')
+    plt.title('Model Evaluation Metrics')
+    plt.ylabel('Score')
+    plt.ylim(0,1)
+    plt.savefig(os.path.join(save_path, 'metrics_barplot.png'))
+    plt.close()
+
 
 if __name__ == "__main__":
-    metrics = {
-        'Model': ['Logistic Regression', 'Decision Tree'],
-        'Accuracy': [0.85, 0.78],
-        'Precision': [0.82, 0.76],
-        'Recall': [0.80, 0.75]
+    example_metrics = {
+        'accuracy': 0.85,
+        'precision': 0.82,
+        'recall': 0.80,
+        'f1': 0.81
     }
-    save_metrics_and_plots(metrics)
+    save_metrics_and_plots(example_metrics)
