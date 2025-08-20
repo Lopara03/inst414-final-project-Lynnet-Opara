@@ -61,8 +61,11 @@ Running analytical models
 Generating visualizations
 
 # Code Package Structure
+
 Copy
+
 Edit
+
 inst414-final-project-Lynnet-Opara/
 
 ```
