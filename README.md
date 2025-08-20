@@ -44,8 +44,12 @@ Run the project pipeline by executing:
 
 
 Copy
+
 Edit
+
 python main.py
+
+
 This will run the full data science pipeline including:
 
 Extracting raw data files
