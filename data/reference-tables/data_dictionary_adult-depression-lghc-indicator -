@@ -1,0 +1,9 @@
+attribute_name,description,data_type,example_value,unit
+Year,Year the survey data was collected,int,2012,year
+Strata,"Category of the population (e.g., Total, Sex, Race-Ethnicity, Education)",str,Sex,N/A
+Strata Name,Specific subgroup within the Strata,str,Male,N/A
+Frequency,Number of survey respondents in this subgroup,int,561,individuals
+Weighted Frequency,Weighted count to reflect populaton estimates,float,1116664,individuals
+Percent,Percentage of respondents in this subgroup reporting depression,float,8.12,percent (%)
+Lower 95% CL,Lower bound of 95% confidence interval for Percent,float,7.32,percent (%)
+Upper 95% CL,Upper bound of 95% confidence interval for Percent,float,8.92,percent (%)
