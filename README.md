@@ -29,16 +29,19 @@ To get started:
    git clone [your-repo-link]
    cd inst414-final-project-lynnet-opara
 
-2. Create and activate a virtual environment
+2. Create and activate a virtual environment  
+
+```bash
 python3 -m venv venv
 source venv/bin/activate   # On Mac/Linux
 .\venv\Scripts\activate    # On Windows
-
+```
 3. Install: "pip install -r requirements.txt" into terminal
 pip install -r requirements.txt
 
 # Running the Project
 Run the project pipeline by executing:
+
 
 Copy
 Edit
